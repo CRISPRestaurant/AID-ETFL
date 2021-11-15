@@ -23,9 +23,9 @@ version_tag = '0.0.2'
 
 setup(name='ETFL',
       version=version_tag,
-      author='LCSB@EPFL',
-      author_email='softwares.lcsb@epfl.ch',
-      url='https://github.com/EPFL-LCSB/etfl/',
+      author='LCSB@EPFL and Siddhartha Peri',
+      author_email='softwares.lcsb@epfl.ch, peri3@illinois.edu',
+      url='https://github.com/CRISPRestaurant/AID-ETFL',
       download_url='https://github.com/EPFL-LCSB/etfl/archive/'+version_tag+'.tar.gz',
       install_requires=['biopython',
                         'cobra>=0.13',

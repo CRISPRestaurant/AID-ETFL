@@ -1393,6 +1393,7 @@ class MEModel(LCSBModel, Model):
 
     def _constrain_polymerase(self, the_gene,
                               basal_fraction = 0):
+        print(the_gene.transcribed_by.id)
         """
         Add the coupling between DNA availability and RNAP charging
         The number of RNAP assigned to a gene locus is lower than
