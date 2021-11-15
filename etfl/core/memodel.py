@@ -1435,7 +1435,7 @@ class MEModel(LCSBModel, Model):
 
         # Get the RNAP assigned to this transcription
         RNAPi_hat = rnap_usage_vars.get_by_id(the_gene.id)
-        print(type(RNAPi_hat))
+        print(RNAPi_hat.id)
 
         # Get the number of loci
         n_loci = the_gene.copy_number
