@@ -1435,7 +1435,6 @@ class MEModel(LCSBModel, Model):
 
         # Get the RNAP assigned to this transcription
         RNAPi_hat = rnap_usage_vars.get_by_id(the_gene.id)
-        print(the_gene.transcribed_by[0])
 
         # Get the number of loci
         n_loci = the_gene.copy_number
@@ -1453,7 +1452,7 @@ class MEModel(LCSBModel, Model):
         elif the_gene.transcribed_by[0] in ["rnap_interference", "rnap_interference_mit"]:
             CRISPR_AID_factor = 0.17
         elif the_gene.transcribed_by[0] in ["rnap_deletion", "rnap_deletion_mit"]:
-            CRISPR_AID_factor = 0.01
+            CRISPR_AID_factor = 0.03
 
         scaling_factor = CRISPR_AID_factor * self.dna.scaling_factor / RNAPi_hat.scaling_factor
 
