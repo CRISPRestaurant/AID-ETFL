@@ -1446,7 +1446,16 @@ class MEModel(LCSBModel, Model):
         #
         # Non-dimensionalized
 
-        scaling_factor = self.dna.scaling_factor / RNAPi_hat.scaling_factor
+        CRISPR_AID_factor = 1
+
+        if the_gene.transcribed_by[0] in ["rnap_activation", "rnap_activation_mit"]:
+            CRISPR_AID_factor = 8.5
+        elif the_gene.transcribed_by[0] in ["rnap_interference", "rnap_interference_mit"]:
+            CRISPR_AID_factor = 0.17
+        elif the_gene.transcribed_by[0] in ["rnap_deletion", "rnap_deletion_mit"]:
+            CRISPR_AID_factor = 0.01
+
+        scaling_factor = CRISPR_AID_factor * self.dna.scaling_factor / RNAPi_hat.scaling_factor
 
         rnap_alloc = RNAPi_hat \
                      - loadmax * n_loci * scaling_factor * self.dna.scaled_concentration
