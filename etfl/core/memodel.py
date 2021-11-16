@@ -1447,11 +1447,11 @@ class MEModel(LCSBModel, Model):
 
         CRISPR_AID_factor = 1
 
-        if the_gene.transcribed_by[0] in ["rnap_activation", "rnap_activation_mit"]:
+        if (the_gene.transcribed_by != None) and the_gene.transcribed_by[0] in ["rnap_activation", "rnap_activation_mit"]:
             CRISPR_AID_factor = 8.5
-        elif the_gene.transcribed_by[0] in ["rnap_interference", "rnap_interference_mit"]:
+        elif (the_gene.transcribed_by != None) and the_gene.transcribed_by[0] in ["rnap_interference", "rnap_interference_mit"]:
             CRISPR_AID_factor = 0.17
-        elif the_gene.transcribed_by[0] in ["rnap_deletion", "rnap_deletion_mit"]:
+        elif (the_gene.transcribed_by != None) and the_gene.transcribed_by[0] in ["rnap_deletion", "rnap_deletion_mit"]:
             CRISPR_AID_factor = 0.03
 
         scaling_factor = CRISPR_AID_factor * self.dna.scaling_factor / RNAPi_hat.scaling_factor
