@@ -107,7 +107,7 @@ class MEModel(LCSBModel, Model):
                        n_mu_bins, name)
 
     def init_etfl(self, big_M, growth_reaction, mu_range, n_mu_bins, name):
-
+        print("ME 1")
         self.big_M = big_M
         self._var_dict = dict()
         self._cons_dict = dict()
@@ -128,6 +128,7 @@ class MEModel(LCSBModel, Model):
             message = "Empty model initialized"
             # raise ValueError(message)
             self.logger.info(message)
+        print("ME 2")
         self.aa_dict = dict()
         self.rna_nucleotides = dict()
         self.trna_dict = dict()
@@ -147,6 +148,7 @@ class MEModel(LCSBModel, Model):
         self.rnap = OrderedDict()
 
         self.coupling_dict = dict()
+        print("ME 3")
 
     @property
     def mu(self):
