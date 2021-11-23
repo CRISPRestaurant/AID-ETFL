@@ -44,11 +44,13 @@ class ThermoMEModel(MEModel, ThermoModel):
                  max_ph=std.MAX_PH,
                  prot_scaling = 1000,
                  mrna_scaling = None, ):
-
+        print("Thermo 1")
         if name is None:
             name = 'ETFL_' + name if name else 'ETFL model'
 
         LCSBModel.__init__(self, model, name)
+
+        print("Thermo 2")
 
         ###############
         #   ME part   #
@@ -60,6 +62,8 @@ class ThermoMEModel(MEModel, ThermoModel):
             self.sanitize_varnames()
 
         self.init_etfl(big_M, growth_reaction, mu_range, n_mu_bins, name)
+
+        print("Thermo 3")
 
         ###############
         # Thermo part #
@@ -75,6 +79,8 @@ class ThermoMEModel(MEModel, ThermoModel):
 
         self.logger = get_bistream_logger('thermomodel_' + str(self.name))
 
+        print("Thermo 4")
+
         # Compute internal values to adapt the the thermo_unit provided
         if self.thermo_unit == "kJ/mol":
             self.GAS_CONSTANT = 8.314472 / 1000  # kJ/(K mol)
@@ -85,12 +91,16 @@ class ThermoMEModel(MEModel, ThermoModel):
 
         self.RT = self.GAS_CONSTANT * self.TEMPERATURE
 
+        print("Thermo 5")
+
         # CONSTANTS
         self.MAX_pH = max_ph
         self.MIN_pH = min_ph
 
         self.logger.info('# Model initialized with units {} and temperature {} K'  \
                     .format(self.thermo_unit, self.TEMPERATURE))
+        
+        print("Thermo 6")
 
 
     def print_info(self):

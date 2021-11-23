@@ -1445,7 +1445,7 @@ class MEModel(LCSBModel, Model):
         #
         # Non-dimensionalized
 
-        CRISPR_AID_factor = 1
+        CRISPR_AID_factor = 1.0
 
         if (the_gene.transcribed_by != None) and the_gene.transcribed_by[0] in ["rnap_activation", "rnap_activation_mit"]:
             CRISPR_AID_factor = 8.5
