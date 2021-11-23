@@ -57,11 +57,16 @@ class ThermoMEModel(MEModel, ThermoModel):
         ###############
 
         self.logger = get_bistream_logger('ME model' + str(self.name))
+        print("Thermo 2.25")
         self.parent = model
         if model is not None:
             self.sanitize_varnames()
 
+        print("Thermo 2.5")
+
         self.init_etfl(big_M, growth_reaction, mu_range, n_mu_bins, name)
+
+        print("Thermo 2.75")
 
         print("Thermo 3")
 
