@@ -111,7 +111,9 @@ class MEModel(LCSBModel, Model):
         self.big_M = big_M
         self._var_dict = dict()
         self._cons_dict = dict()
+        print("ME 1.25")
         self.logger.info('# ETFL Model {} initialized'.format(name))
+        print("ME 1.5")
         self._growth_reaction_id = growth_reaction
         self._mu_range = mu_range
         self._n_mu_bins = n_mu_bins
