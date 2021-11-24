@@ -122,12 +122,14 @@ class MEModel(LCSBModel, Model):
                                          lb=mu_range[0],
                                          ub=mu_range[1])
             self.init_mu_variables()
+            print("ME mu")
         else:
             # message = """ You need to supply mu_range."""
 
             message = "Empty model initialized"
             # raise ValueError(message)
             self.logger.info(message)
+            print("ME no mu")
         print("ME 2")
         self.aa_dict = dict()
         self.rna_nucleotides = dict()
