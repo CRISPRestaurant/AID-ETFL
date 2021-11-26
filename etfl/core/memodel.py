@@ -10,6 +10,7 @@ Core for the ME-part
 
 """
 
+from typing import Generic
 import numpy as np
 import optlang
 import pandas as pd
@@ -1458,8 +1459,14 @@ class MEModel(LCSBModel, Model):
         elif (the_gene.transcribed_by != None) and the_gene.transcribed_by[0] in ["rnap_interference", "rnap_interference_mit"]:
             CRISPR_AID_factor = 0.17
         elif (the_gene.transcribed_by != None) and the_gene.transcribed_by[0] in ["rnap_deletion", "rnap_deletion_mit"]:
-            CRISPR_AID_factor = 0.03
-
+            CRISPR_AID_factor = 0.0
+        else:
+            CRISPR_AID_factor = self.add_variable(
+                GenericVariable,
+                hook = self,
+                id = "ECNONAIDG_%s" % (the_gene.id), # Expression Change in a non-AID intervention gene
+            )
+            
         scaling_factor = CRISPR_AID_factor * self.dna.scaling_factor / RNAPi_hat.scaling_factor
 
         rnap_alloc = RNAPi_hat \
