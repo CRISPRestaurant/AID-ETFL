@@ -46,7 +46,7 @@ from ..optim.constraints import CatalyticConstraint, ForwardCatalyticConstraint,
     InterpolationConstraint, RNAPAllocation, LipidMassBalance, IonMassBalance,\
     CarbohydrateMassBalance, MinimalCoupling, MinimalAllocation
 from ..optim.variables import ModelVariable, GrowthActivation, \
-    EnzymeVariable, LinearizationVariable, RibosomeUsage, RNAPUsage, \
+    EnzymeVariable, LinearizationVariable, RibosomeUsage, RNAPUsage, NonAIDRNAPUsage, \
     FreeEnzyme, BinaryActivator, InterpolationVariable, DNAVariable, \
     GrowthRate, GenericVariable
 
@@ -1466,8 +1466,9 @@ class MEModel(LCSBModel, Model):
             CRISPR_AID_factor = 0.0
         else:
             CRISPR_AID_factor = self.add_variable(
-                GenericVariable,
+                NonAIDRNAPUsage,
                 hook = the_gene,
+                scaling_factor = 1.0,
                 id = "ECNONAIDG_%s" % (the_gene.id) # Expression Change in a non-AID intervention gene
             )
             
