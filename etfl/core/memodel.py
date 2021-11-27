@@ -1308,8 +1308,10 @@ class MEModel(LCSBModel, Model):
             self._constrain_polysome(the_mrna)
             
         if self.dna is not None:
+            print("Constraining Transcription 1")
             for the_gene in tqdm(self.genes, desc='constraining transcription'):
                 self._constrain_polymerase(the_gene)
+            print("Constraining Transcription 2")
         else:
             self.logger.warning('RNAP allocation constraints were not added,'
                                 'since DNA is not defined for the model. Use add'
@@ -1428,6 +1430,8 @@ class MEModel(LCSBModel, Model):
         # check if it is not ExpressedGene no constraint should be defined
         if not isinstance(the_gene, ExpressedGene):
             return
+
+        print("Came here!")
         
         rnap_footprint_size = 40  # [bp] see docstring of ```_constrain_polymerases'''
         loadmax = len(the_gene.sequence) / rnap_footprint_size
@@ -1463,8 +1467,8 @@ class MEModel(LCSBModel, Model):
         else:
             CRISPR_AID_factor = self.add_variable(
                 GenericVariable,
-                hook = self,
-                id = "ECNONAIDG_%s" % (the_gene.id), # Expression Change in a non-AID intervention gene
+                hook = the_gene,
+                id = "ECNONAIDG_%s" % (the_gene.id) # Expression Change in a non-AID intervention gene
             )
             
         scaling_factor = CRISPR_AID_factor * self.dna.scaling_factor / RNAPi_hat.scaling_factor
