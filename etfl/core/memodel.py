@@ -1465,12 +1465,14 @@ class MEModel(LCSBModel, Model):
         elif (the_gene.transcribed_by != None) and the_gene.transcribed_by[0] in ["rnap_deletion", "rnap_deletion_mit"]:
             CRISPR_AID_factor = 0.0
         else:
-            CRISPR_AID_factor = self.add_variable(
-                NonAIDRNAPUsage,
-                hook = the_gene,
-                scaling_factor = 1.0,
-                id = "ECNONAIDG_%s" % (the_gene.id) # Expression Change in a non-AID intervention gene
-            )
+            #CRISPR_AID_factor = self.add_variable(
+            #    NonAIDRNAPUsage,
+            #    hook = the_gene,
+            #    scaling_factor = 1.0,
+            #    id = "ECNONAIDG_%s" % (the_gene.id) # Expression Change in a non-AID intervention gene
+            #)
+
+            CRISPR_AID_factor = 0.5
             
         scaling_factor = CRISPR_AID_factor * self.dna.scaling_factor / RNAPi_hat.scaling_factor
 
