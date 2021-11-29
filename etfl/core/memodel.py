@@ -1495,7 +1495,7 @@ class MEModel(LCSBModel, Model):
                 model_z_i = self.add_variable(
                     kind = LinearizationVariable,
                     hook = self,
-                    id = z_name,
+                    id_= z_name,
                     ub = 0,
                     queue = False
                 )
@@ -1530,7 +1530,7 @@ class MEModel(LCSBModel, Model):
                 model_z_i = self.add_variable(
                     kind = LinearizationVariable,
                     hook = self,
-                    id = z_name,
+                    id_= z_name,
                     lb = 0,
                     queue = False
                 )
