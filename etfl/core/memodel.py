@@ -1457,6 +1457,7 @@ class MEModel(LCSBModel, Model):
         # Non-dimensionalized
 
         CRISPR_AID_factor = 1.0
+        is_CRISPR_AID_factor_variable = False
 
         if (the_gene.transcribed_by != None) and the_gene.transcribed_by[0] in ["rnap_activation", "rnap_activation_mit"]:
             CRISPR_AID_factor = 8.5
@@ -1465,38 +1466,92 @@ class MEModel(LCSBModel, Model):
         elif (the_gene.transcribed_by != None) and the_gene.transcribed_by[0] in ["rnap_deletion", "rnap_deletion_mit"]:
             CRISPR_AID_factor = 0.0
         else:
-            #CRISPR_AID_factor = self.add_variable(
-            #    NonAIDRNAPUsage,
-            #    hook = the_gene,
-            #    scaling_factor = 1.0,
-            #    id = "ECNONAIDG_%s" % (the_gene.id) # Expression Change in a non-AID intervention gene
-            #)
+            CRISPR_AID_factor = self.add_variable(
+                NonAIDRNAPUsage,
+                hook = the_gene,
+                scaling_factor = 1.0,
+                id = "ECNONAIDG_%s" % (the_gene.id) # Expression Change in a non-AID intervention gene
+            )
 
-            CRISPR_AID_factor = 0.5
+            is_CRISPR_AID_factor_variable = True
             
         scaling_factor = CRISPR_AID_factor * self.dna.scaling_factor / RNAPi_hat.scaling_factor
 
         rnap_alloc = RNAPi_hat \
                      - loadmax * n_loci * scaling_factor * self.dna.scaled_concentration
-
-        # Add expression coupling
-        self.add_constraint(kind=RNAPAllocation,
-                            hook=the_gene,
-                            expr=rnap_alloc,
-                            queue=True,
-                                ub=0)
         
+        ga_vars = self.get_ordered_ga_vars()
+
+        unique_name = the_gene.id
+
+        if the_gene.transcribed_by != None:
+            unique_name += "_%s" % (the_gene.transcribed_by[0])
+        else:
+            unique_name += "_NULLRNAP"
+
+        if is_CRISPR_AID_factor_variable:
+            for i, ga_i in enumerate(ga_vars):
+                z_name = "__MUL__".join([ga_i.name, unique_name])
+                model_z_i = self.add_variable(
+                    kind = LinearizationVariable,
+                    hook = self,
+                    id = z_name,
+                    ub = 0,
+                    queue = False
+                )
+
+                z_i, new_constraints = petersen_linearization(b = ga_i, x = rnap_alloc, z = model_z_i)
+
+                for cons in new_constraints:
+                    self.add_constraint(
+                        kind = LinearizationConstraint,
+                        hook = self,
+                        id_=cons.name,
+                        expr = cons.expression,
+                        ub = cons.ub,
+                        queue = False
+                    )
+        else:
+            # Add expression coupling
+            self.add_constraint(kind=RNAPAllocation,
+                                hook=the_gene,
+                                expr=rnap_alloc,
+                                queue=True,
+                                    ub=0)
+
         # [RNAPi]_hat  >= Lgene/Lrnap * σ_dna/σ_rp * n_loci * [DNA]_hat
         basal_fraction = float(the_gene.min_tcpt_activity)
         min_alloc = RNAPi_hat \
                      - basal_fraction * loadmax * n_loci * scaling_factor * \
                          self.dna.scaled_concentration
-                         
-        self.add_constraint(kind=MinimalAllocation,
-                            hook=the_gene,
-                            expr=min_alloc,
-                            queue=True,
-                                lb=0)
+        if is_CRISPR_AID_factor_variable:
+            for i, ga_i in enumerate(ga_vars):
+                z_name = "__MUL__".join([ga_i.name, unique_name + "_MINIMUM"])
+                model_z_i = self.add_variable(
+                    kind = LinearizationVariable,
+                    hook = self,
+                    id = z_name,
+                    lb = 0,
+                    queue = False
+                )
+
+                z_i, new_constraints = petersen_linearization(b = ga_i, x = rnap_alloc, z = model_z_i)
+
+                for cons in new_constraints:
+                    self.add_constraint(
+                        kind = LinearizationConstraint,
+                        hook = self,
+                        id_=cons.name,
+                        expr = cons.expression,
+                        ub = cons.ub,
+                        queue = False
+                    )
+        else:           
+            self.add_constraint(kind=MinimalAllocation,
+                                hook=the_gene,
+                                expr=min_alloc,
+                                queue=True,
+                                    lb=0)
 
     def edit_gene_copy_number(self, gene_id):
         """
