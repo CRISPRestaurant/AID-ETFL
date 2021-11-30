@@ -1447,6 +1447,8 @@ class MEModel(LCSBModel, Model):
         # Get the RNAP assigned to this transcription
         RNAPi_hat = rnap_usage_vars.get_by_id(the_gene.id)
 
+        print(type(the_gene.id))
+
         # Get the number of loci
         n_loci = the_gene.copy_number
         # σ_dna is the DNA scaling factor,
