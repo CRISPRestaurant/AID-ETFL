@@ -1474,14 +1474,12 @@ class MEModel(LCSBModel, Model):
 
             non_aid_variable = self.add_variable(
                 NonAIDRNAPUsage,
-                hook = self,
-                id_ = "%s_NONAIDRNAPUSAGE" % (the_gene.id)
+                hook = self
             )
 
             non_aid_variable_min = self.add_variable(
                 NonAIDRNAPUsage,
-                hook = self,
-                id_ = "%s_NONAIDRNAPUSAGEMIN" % (the_gene.id)
+                hook = self
             )
             
         scaling_factor = CRISPR_AID_factor * self.dna.scaling_factor / RNAPi_hat.scaling_factor
