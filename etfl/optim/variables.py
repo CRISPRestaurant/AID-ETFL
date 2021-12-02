@@ -138,7 +138,7 @@ class RNAPUsage(GeneVariable):
     prefix = 'RM_'
 
 class NonAIDRNAPUsage(GeneVariable):
-    prefix = "NAIDRNAPUsage"
+    prefix = "NAIDRNAPUsage_"
 
 
 class FreeEnzyme(EnzymeVariable):
