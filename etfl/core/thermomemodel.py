@@ -55,7 +55,7 @@ class ThermoMEModel(MEModel, ThermoModel):
 
         self.logger = get_bistream_logger('ME model' + str(self.name))
         self.parent = model
-        self.model = model
+
         if model is not None:
             self.sanitize_varnames()
 
