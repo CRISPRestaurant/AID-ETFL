@@ -1474,13 +1474,15 @@ class MEModel(LCSBModel, Model):
 
             non_aid_variable = self.add_variable(
                 RNAPUsage,
-                hook = self,
+                the_gene,
+                scaling_factor = 1,
                 for_non_rnap = True
             )
 
             non_aid_variable_min = self.add_variable(
                 RNAPUsage,
-                hook = self,
+                the_gene,
+                scaling_factor = 1,
                 for_non_rnap = True
             )
             
