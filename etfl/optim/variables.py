@@ -137,8 +137,15 @@ class RNAPUsage(GeneVariable):
     """
     prefix = 'RM_'
 
-    def __init__(self, for_non_rnap = False, **kwargs):
-        self.for_non_rnap = for_non_rnap
+    def __init__(self, gene, non_aid_factor = False, **kwargs):
+        self.non_aid_factor = non_aid_factor
+
+        if non_aid_factor:
+            prefix = "RMNONAID_"
+        
+        GenericVariable.__init__(self, gene, **kwargs)
+        
+
 
 class NonAIDRNAPUsage(GeneVariable):
     prefix = "NAIDRNAPUsage_"
