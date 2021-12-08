@@ -1447,8 +1447,6 @@ class MEModel(LCSBModel, Model):
         # Get the RNAP assigned to this transcription
         RNAPi_hat = rnap_usage_vars.get_by_id(the_gene.id)
 
-        print(type(the_gene.id))
-
         # Get the number of loci
         n_loci = the_gene.copy_number
         # σ_dna is the DNA scaling factor,
@@ -1476,14 +1474,18 @@ class MEModel(LCSBModel, Model):
                 RNAPUsage,
                 the_gene,
                 non_aid_variable = True,
-                scaling_factor = 1
+                scaling_factor = 1,
+                lb = -self.big_M,
+                ub = self.big_M
             )
 
             non_aid_variable_min = self.add_variable(
                 RNAPUsage,
                 the_gene,
                 non_aid_variable = True,
-                scaling_factor = 1
+                scaling_factor = 1,
+                lb = -self.big_M,
+                ub = self.big_M
             )
             
         scaling_factor = CRISPR_AID_factor * self.dna.scaling_factor / RNAPi_hat.scaling_factor
