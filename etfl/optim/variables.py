@@ -140,10 +140,10 @@ class RNAPUsage(GeneVariable):
     def __init__(self, gene, non_aid_factor = False, **kwargs):
         self.non_aid_factor = non_aid_factor
 
-        if non_aid_factor:
+        if self.non_aid_factor:
             prefix = "RMNONAID_"
         
-        GenericVariable.__init__(self, gene, **kwargs)
+        GeneVariable.__init__(self, gene, **kwargs)
         
 
 
