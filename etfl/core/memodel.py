@@ -1468,25 +1468,26 @@ class MEModel(LCSBModel, Model):
         elif (the_gene.transcribed_by != None) and the_gene.transcribed_by[0] in ["rnap_deletion", "rnap_deletion_mit"]:
             CRISPR_AID_factor = 0.0
         else:
-            is_CRISPR_AID_factor = True
+            # is_CRISPR_AID_factor = True
 
-            non_aid_variable = self.add_variable(
-                RNAPUsage,
-                the_gene,
-                non_aid_variable = True,
-                scaling_factor = 1,
-                lb = -self.big_M,
-                ub = self.big_M
-            )
+            # non_aid_variable = self.add_variable(
+            #     RNAPUsage,
+            #     the_gene,
+            #     non_aid_variable = True,
+            #     scaling_factor = 1,
+            #     lb = -self.big_M,
+            #     ub = self.big_M
+            # )
 
-            non_aid_variable_min = self.add_variable(
-                RNAPUsage,
-                the_gene,
-                non_aid_variable = True,
-                scaling_factor = 1,
-                lb = -self.big_M,
-                ub = self.big_M
-            )
+            # non_aid_variable_min = self.add_variable(
+            #     RNAPUsage,
+            #     the_gene,
+            #     non_aid_variable = True,
+            #     scaling_factor = 1,
+            #     lb = -self.big_M,
+            #     ub = self.big_M
+            # )
+            pass
             
         scaling_factor = CRISPR_AID_factor * self.dna.scaling_factor / RNAPi_hat.scaling_factor
 
