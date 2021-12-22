@@ -1731,15 +1731,27 @@ class MEModel(LCSBModel, Model):
         usage = self._get_rnap_total_capacity(rnap_ids = rnap_set,
                                                       genes = gene_list_tot)
         
-        total_allocation = sum([self.rnap[rnap_id].concentration for rnap_id in rnap_set]) / min([self.rnap[rnap_id].scaling_factor for rnap_id in rnap_set])
-
-        self.add_constraint(kind=TotalCapacity,
-                            hook=self,
-                            id_=id_maker_rib_rnap(rnap_set),
-                            expr=usage,
-                            lb = -0.2 * total_allocation,
-                            ub = 0,
-                            )
+        usage_lower_bound = self._get_rnap_total_capacity(
+            rnap_ids = rnap_set,
+            genes = gene_list_tot,
+            lower_bound=True
+        )
+        
+        self.add_constraint(
+            kind=TotalCapacity,
+            hook = self,
+            id="%s_LB" % (id_maker_rib_rnap(rnap_set)),
+            expr = usage_lower_bound,
+            lb = 0
+        )
+        
+        self.add_constraint(
+            kind=TotalCapacity,
+            hook=self,
+            id_="%s_UB" % (id_maker_rib_rnap(rnap_set)),
+            expr=usage,
+            ub = 0
+        )
 
         # update variable and constraints attributes
         self.regenerate_constraints()
@@ -1770,7 +1782,7 @@ class MEModel(LCSBModel, Model):
                     transcription_dict[this_type] = [var.hook.id]
         return transcription_dict
 
-    def _get_rnap_total_capacity(self, rnap_ids, genes):
+    def _get_rnap_total_capacity(self, rnap_ids, genes, lower_bound = False):
         all_rnap_usage = self.get_variables_of_type(RNAPUsage)
         # only for genes trascribed by thiscombination of rnaps 
         sum_RMs = symbol_sum([x.unscaled for x in all_rnap_usage \
@@ -1780,11 +1792,18 @@ class MEModel(LCSBModel, Model):
         
         # The total RNAP capacity constraint looks like
         # ΣRMi + Σ(free RNAPj) = Σ(Total RNAPj)
-        usage = sum_RMs \
-                + sum([x.unscaled for x in free_rnap]) \
-                - sum([self.rnap[rnap_id].concentration for rnap_id in rnap_ids])
-        usage /= min([self.rnap[rnap_id].scaling_factor for rnap_id in rnap_ids])
-        return usage
+        if not lower_bound:
+            usage = sum_RMs \
+                    + sum([x.unscaled for x in free_rnap]) \
+                    - sum([self.rnap[rnap_id].concentration for rnap_id in rnap_ids])
+            usage /= min([self.rnap[rnap_id].scaling_factor for rnap_id in rnap_ids])
+            return usage
+        else:
+            usage = sum_RMs \
+                    + sum([x.unscaled for x in free_rnap]) \
+                    - 0.8 * sum([self.rnap[rnap_id].concentration for rnap_id in rnap_ids])
+            usage /= min([self.rnap[rnap_id].scaling_factor for rnap_id in rnap_ids])
+            return usage
     
 
     def apply_rnap_catalytic_constraint(self, reaction, queue):
