@@ -1740,7 +1740,7 @@ class MEModel(LCSBModel, Model):
         self.add_constraint(
             kind=TotalCapacity,
             hook = self,
-            id="%s_LB" % (id_maker_rib_rnap(rnap_set)),
+            id_="%s_LB" % (id_maker_rib_rnap(rnap_set)),
             expr = usage_lower_bound,
             lb = 0
         )
