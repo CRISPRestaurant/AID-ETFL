@@ -1730,11 +1730,14 @@ class MEModel(LCSBModel, Model):
         rnap_set = frozenset([x for x in self.rnap.keys()]) # a set of rnap ids
         usage = self._get_rnap_total_capacity(rnap_ids = rnap_set,
                                                       genes = gene_list_tot)
+        
+        total_allocation = sum([self.rnap[rnap_id].concentration for rnap_id in rnap_set]) / min([self.rnap[rnap_id].scaling_factor for rnap_id in rnap_set])
+
         self.add_constraint(kind=TotalCapacity,
                             hook=self,
                             id_=id_maker_rib_rnap(rnap_set),
                             expr=usage,
-                            lb = 0,
+                            lb = -0.2 * total_allocation,
                             ub = 0,
                             )
 
