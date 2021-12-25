@@ -108,13 +108,10 @@ class MEModel(LCSBModel, Model):
                        n_mu_bins, name)
 
     def init_etfl(self, big_M, growth_reaction, mu_range, n_mu_bins, name):
-        print("ME 1")
         self.big_M = big_M
         self._var_dict = dict()
         self._cons_dict = dict()
-        print("ME 1.25")
         self.logger.info('# ETFL Model {} initialized'.format(name))
-        print("ME 1.5")
         self._growth_reaction_id = growth_reaction
         self._mu_range = mu_range
         self._n_mu_bins = n_mu_bins
@@ -125,15 +122,12 @@ class MEModel(LCSBModel, Model):
                                          lb=mu_range[0],
                                          ub=mu_range[1])
             self.init_mu_variables()
-            print("ME mu")
         else:
             # message = """ You need to supply mu_range."""
 
             message = "Empty model initialized"
             # raise ValueError(message)
             self.logger.info(message)
-            print("ME no mu")
-        print("ME 2")
         self.aa_dict = dict()
         self.rna_nucleotides = dict()
         self.trna_dict = dict()
@@ -153,7 +147,6 @@ class MEModel(LCSBModel, Model):
         self.rnap = OrderedDict()
 
         self.coupling_dict = dict()
-        print("ME 3")
 
     @property
     def mu(self):
